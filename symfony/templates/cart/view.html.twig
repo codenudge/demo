@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Shopping Cart{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Shopping Cart</h1>
+
+        <div class="mb-3">
+            <a href="/products" class="btn btn-secondary">Continue Shopping</a>
+        </div>
+
+        {% if items is empty %}
+            <div class="alert alert-info">
+                Your cart is empty.
+            </div>
+        {% else %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>${{ item.product.price }}</td>
+                            <td>
+                                <form action="/cart/update/{{ item.product.id }}" method="get" style="display: inline;">
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" style="width: 60px;">
+                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                </form>
+                            </td>
+                            <td>${{ item.subtotal }}</td>
+                            <td>
+                                <a href="/cart/remove/{{ item.product.id }}" class="btn btn-sm btn-danger">Remove</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                        <td><strong>${{ total }}</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <!-- Bad practice: GET request for destructive operation -->
+                    <a href="/cart/clear" class="btn btn-warning">Clear Cart</a>
+                </div>
+                <div class="col-md-6 text-right">
+                    <!-- Bad practice: Hardcoded checkout button with no functionality -->
+                    <button class="btn btn-success" onclick="alert('Checkout functionality not implemented!')">Proceed to Checkout</button>
+                </div>
+            </div>
+
+            <!-- Bad practice: Hardcoded recommended products -->
+            <div class="mt-5">
+                <h3>Recommended Products</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Recommended Product 1">
+                            <div class="card-body">
+                                <h5 class="card-title">Recommended Product 1</h5>
+                                <p class="card-text">$99.99</p>
+                                <a href="#" class="btn btn-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Recommended Product 2">
+                            <div class="card-body">
+                                <h5 class="card-title">Recommended Product 2</h5>
+                                <p class="card-text">$79.99</p>
+                                <a href="#" class="btn btn-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Recommended Product 3">
+                            <div class="card-body">
+                                <h5 class="card-title">Recommended Product 3</h5>
+                                <p class="card-text">$89.99</p>
+                                <a href="#" class="btn btn-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Bad practice: Inline JavaScript -->
+    <script>
+        // Bad practice: Global JavaScript function
+        function updateQuantity(productId, quantity) {
+            // Bad practice: Direct DOM manipulation
+            document.getElementById('quantity-' + productId).value = quantity;
+            // Bad practice: Alert for user feedback
+            alert('Quantity updated!');
+        }
+    </script>
+{% endblock %}
