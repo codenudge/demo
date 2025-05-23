@@ -5,7 +5,11 @@
 {% block body %}
     <div class="container mt-4">
         <h1>Products</h1>
-        
+
+        <div class="mb-3">
+            <a href="/cart" class="btn btn-primary">View Cart</a>
+        </div>
+
         {% if products is empty %}
             <p>No products found.</p>
         {% else %}
@@ -15,6 +19,7 @@
                         <th>Name</th>
                         <th>Price</th>
                         <th>Description</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,6 +28,14 @@
                             <td>{{ product.name }}</td>
                             <td>{{ product.price }}</td>
                             <td>{{ product.description }}</td>
+                            <td>
+                                <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-sm btn-info">View</a>
+
+                                <form action="/cart/add/{{ product.id }}" method="get" style="display: inline;">
+                                    <input type="number" name="quantity" value="1" min="1" style="width: 50px;">
+                                    <button type="submit" class="btn btn-sm btn-success" onclick="alert('Adding to cart!')">Add to Cart</button>
+                                </form>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
